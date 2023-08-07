@@ -1,0 +1,25 @@
+service: mercury-y
+
+frameworkVersion: "3"
+
+provider:
+  name: aws
+  stage: ${opt:stage, 'dev'}
+  region: ap-northeast-2
+  ecr:
+    images:
+      selenium-python-lambda:
+        path: ./
+        platform: linux/amd64
+
+functions:
+  mercury-y:
+    # API Gateway 와 연동하기 위해 30초로 설정, 연장이 필요할지 테스트 필요
+    timeout: 30
+    memorySize: 2048
+    image:
+      name: selenium-python-lambda
+    events:
+      - http:
+          path: /
+          method: get
